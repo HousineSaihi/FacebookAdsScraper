@@ -1,6 +1,8 @@
 from selenium import webdriver 
 from selenium.webdriver.common.by import By
 import time
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 webdriver_path = r"C:\Users\sayhi\OneDrive\Bureau\cdriver"
 
@@ -8,13 +10,25 @@ webdriver_path = r"C:\Users\sayhi\OneDrive\Bureau\cdriver"
 def loadCards(id):
     url = 'https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=ALL&view_all_page_id='+id+'&sort_data[direction]=desc&sort_data[mode]=relevancy_monthly_grouped&search_type=page&media_type=all' 
     driver = webdriver.Chrome(webdriver_path) 
+    
     driver.get(url)
-    time.sleep(5)
-    endPage=driver.find_element(By.XPATH,'/html/body/div[1]/div[1]/div[1]/div/div/div/div[6]/div[3]/div/div[1]/div/div/div/div/div')
-    time.sleep(8)
-    driver.execute_script("arguments[0].scrollIntoView()",endPage)
-    time.sleep(10)
-    block_cards = driver.find_elements(By.CSS_SELECTOR,'div.xrvj5dj.xdq2opy.xexx8yu.xbxaen2.x18d9i69.xbbxn1n.xdoe023.xbumo9q.x143o31f.x7sq92a.x1crum5w > div.xh8yej3')
+    driver.maximize_window()
+    element = WebDriverWait(driver, 6).until(
+        EC.presence_of_element_located((By.CSS_SELECTOR, "#content > div > div > div > div.x8bgqxi.x1n2onr6 > div._8n_0 > div.x6s0dn4.x78zum5.xdt5ytf.xl56j7k.x1n2onr6.x1ja2u2z.x19gl646.xbumo9q > div.x1dr75xp.xh8yej3.x16md763 > div.xrvj5dj.xdq2opy.xexx8yu.xbxaen2.x18d9i69.xbbxn1n.xdoe023.xbumo9q.x143o31f.x7sq92a.x1crum5w > div:nth-child(1)"))
+    )
+    last_height=driver.execute_script('return document.body.scrollHeight')
+    while True:
+
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+        time.sleep(5)
+        new_height = driver.execute_script("return document.body.scrollHeight")
+        time.sleep(10)
+        block_cards = driver.find_elements(By.CSS_SELECTOR,'div.xrvj5dj.xdq2opy.xexx8yu.xbxaen2.x18d9i69.xbbxn1n.xdoe023.xbumo9q.x143o31f.x7sq92a.x1crum5w > div.xh8yej3')
+        if new_height == last_height:
+            break
+
+        last_height = new_height
+        
     print(len(block_cards))
     return block_cards
     
