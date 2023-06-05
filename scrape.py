@@ -13,7 +13,7 @@ def loadCards(id):
     
     driver.get(url)
     driver.maximize_window()
-    element = WebDriverWait(driver, 6).until(
+    WebDriverWait(driver, 6).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, "#content > div > div > div > div.x8bgqxi.x1n2onr6 > div._8n_0 > div.x6s0dn4.x78zum5.xdt5ytf.xl56j7k.x1n2onr6.x1ja2u2z.x19gl646.xbumo9q > div.x1dr75xp.xh8yej3.x16md763 > div.xrvj5dj.xdq2opy.xexx8yu.xbxaen2.x18d9i69.xbbxn1n.xdoe023.xbumo9q.x143o31f.x7sq92a.x1crum5w > div:nth-child(1)"))
     )
     last_height=driver.execute_script('return document.body.scrollHeight')
@@ -37,8 +37,7 @@ def getCardInfo(card):
 # date diffusion , id , status et #platform
 
     content1=card.find_elements(By.CSS_SELECTOR,"div.x3nfvp2.x1e56ztr")
-    for index, value in enumerate(content1):
-            
+    for index, value in enumerate(content1):       
         if (index ==0):
             ajout=value.find_element(By.CSS_SELECTOR,"span.x8t9es0.xw23nyj.xo1l8bm.x63nzvj.x108nfp6.xq9mrsl.x1h4wwuj.xeuugli")
             data['Status'] = ajout.text
@@ -80,4 +79,3 @@ def getData(url):
     return data  
                 
 data=getData('117627008288878')
-print(data)
